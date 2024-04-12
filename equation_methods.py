@@ -11,7 +11,8 @@ def __catch_zero(f, a, b):
     return "no"
 
 
-def solve(method, f, a, b, eps):
+def solve(method, eq, a, b, eps):
+    f = funcs[eq - 1]
     if method == 1:
         return half_division(f, a, b, eps)
     elif method == 2:
@@ -83,4 +84,5 @@ def simple_iteration(f, a, b, eps):
 
 
 MAX_ITER = 100000
+funcs = [f1, f2, f3]
 derivatives = {f1: df1, f2: df2, f3: df3}
