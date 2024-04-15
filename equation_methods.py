@@ -23,7 +23,12 @@ def solve(method, eq, a, b, eps):
 def half_division(f, a, b, eps):
     caught = __catch_zero(f, a, b)
     if caught != "no":
-        return caught, 0
+        res = {
+            "i": 0,
+            "x": caught,
+            "res": f(caught),
+        }
+        return res
     x_prev = (a + b) / 2
     if f(a) * f(x_prev) > 0:
         a = x_prev
@@ -39,13 +44,23 @@ def half_division(f, a, b, eps):
         x_prev = x
         x = (a + b) / 2
         it += 1
-    return x, it
+    res = {
+        "i": it,
+        "x": x,
+        "res": f(x),
+    }
+    return res
 
 
 def newton(f, a, b, eps):
     caught = __catch_zero(f, a, b)
     if caught != "no":
-        return caught, 0
+        res = {
+            "i": 0,
+            "x": caught,
+            "res": f(caught),
+        }
+        return res
     x_prev = (a + b) / 2
     df = derivatives[f]
     x = x_prev - f(x_prev) / df(x_prev)
@@ -54,7 +69,13 @@ def newton(f, a, b, eps):
         x_prev = x
         x = x_prev - f(x_prev) / df(x_prev)
         it += 1
-    return x, it
+    res = {
+        "i": it,
+        "x": x,
+        "res": f(x),
+    }
+    print(res)
+    return res
 
 
 def __calc_lambda(df, a, b):
@@ -66,13 +87,18 @@ def __calc_lambda(df, a, b):
 def simple_iteration(f, a, b, eps):
     caught = __catch_zero(f, a, b)
     if caught != "no":
-        return caught, 0
+        res = {
+            "i": 0,
+            "x": caught,
+            "res": f(caught),
+        }
+        return res
     df = derivatives[f]
     lam = __calc_lambda(df, a, b)
     phi = lambda x: x + lam * f(x)
     dphi = lambda x: 1 + lam * df(x)
     if abs(dphi(a)) > 1 or abs(dphi(b)) > 1:
-        return "never"
+        return {"error": "never"}
     x_prev = (a + b) / 2
     x = phi(x_prev)
     it = 1
@@ -80,7 +106,12 @@ def simple_iteration(f, a, b, eps):
         x_prev = x
         x = phi(x_prev)
         it += 1
-    return x, it
+    res = {
+        "i": it,
+        "x": x,
+        "res": f(x),
+    }
+    return res
 
 
 MAX_ITER = 100000
